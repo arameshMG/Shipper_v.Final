@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+debug_log.txt
+fedex_debug_log.txt
+shipper_debug_log.txt
+outgoing_body_log.txt
+shipment_result_log.txt
+chain_debug_log.txt
+
