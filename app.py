@@ -20,9 +20,11 @@ def health():
 def create_label():
     data = request.get_json()
     new_user_email = data["newUserEmail"]
+    print("NEW USER EMAIL:", new_user_email)
 
     graph_token = graph_client.get_graph_token()
     recipient_data = graph_client.get_user_address(new_user_email, graph_token)
+    print("RECIPIENT DATA:", recipient_data)
     recipient_name = recipient_data["displayName"]
     recipient_address = fedex_oauth.parse_address(recipient_data["streetAddress"])
 
