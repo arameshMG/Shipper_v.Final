@@ -105,7 +105,7 @@ def create_shipment(shipper_name, shipper_address, recipient_name, recipient_add
 def extract_shipment_info(result):
     shipment = result["output"]["transactionShipments"][0]
     tracking_number = shipment["masterTrackingNumber"]
-    label_url = shipment
+    label_url = shipment["pieceResponses"][0]["packageDocuments"][0]["url"]
 
     return {
         "trackingNumber": tracking_number ,
