@@ -31,6 +31,8 @@ def create_label():
         SHIPPER_NAME, SHIPPER_ADDRESS, recipient_name, recipient_address, fedex_token
     )
 
+    print("FEDEX RESULT:", result)
+
     extracted = fedex_oauth.extract_shipment_info(result)
     return jsonify(extracted)
 
