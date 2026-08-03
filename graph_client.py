@@ -13,7 +13,7 @@ def get_graph_token():
 
     print("TENANT ID:", config.GRAPH_TENANT_ID)
     print("CLIENT ID:", config.GRAPH_CLIENT_ID)
-    print("CLIENT SECRET:" config. GRAPH_CLIENT_SECRET)
+    print("CLIENT SECRET:", config. GRAPH_CLIENT_SECRET)
 
     response = requests.post(url, data=data, verify=False)
 
