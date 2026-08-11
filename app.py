@@ -38,6 +38,40 @@ def create_label():
     extracted = fedex_oauth.extract_shipment_info(result)
     return jsonify(extracted)
 
+@app.route("/create-labels", methods=["POST"])
+def create_labels():
+    data = request.get_json()
+    user_email = data["userEmail"]
+    print("USER EMAIL:", user_email)
+
+    graph_token = graph_client.get_graph_token()
+    user_data = graph_client.get_user_address(user_email, graph_token)
+    print("User DATA:", user_data)
+    user_name = user_data["displayName"]
+    user_address = fedex_oauth.parse_address(user_data["streetAddress"])
+
+    fedex_token = fedex_oauth.get_fedex_token()
+
+# Outbound
+
+    outbound_result = fedex_oauth.create_shipment(
+        SHIPPER_NAME, SHIPPER_ADDRESS, user_name, user_address, fedex_token
+    )
+    print("OUTBOUND RESULT:", outbound_result)
+    outbound_extracted = fedex_oauth.extract_shipment_info(outbound_result)
+
+# Inbound
+
+    inbound_result = fedex_oauth.create_shipment(
+        user_name, user_address, SHIPPER_NAME, SHIPPER_ADDRESS, fedex_token
+    )
+    print("RETURN RESULT:", inbound_result)
+    return_extracted = fedex_oauth.extract_shipment_info(inbound_result)
+
+    return jsonify({
+        "outboundLabel": outbound_extracted,
+        "returnLabel": return_extracted
+    })
+
 if __name__ == "__main__":
     app.run(debug=True)
-
