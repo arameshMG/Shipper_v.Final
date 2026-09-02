@@ -1,5 +1,6 @@
 import requests
 import config
+from debug_utils import debug_log
 
 def get_fedex_token():
     url = "https://apis-sandbox.fedex.com/oauth/token"
@@ -36,6 +37,7 @@ def parse_address(full_address):
     }
 
 def create_shipment(shipper_name, shipper_address, recipient_name, recipient_address, token):
+    debug_log("Creating shipment", shipper=shipper_name, recipient=recipient_name)
     url = "https://apis-sandbox.fedex.com/ship/v1/shipments"
 
     headers = {
@@ -100,6 +102,7 @@ def create_shipment(shipper_name, shipper_address, recipient_name, recipient_add
     }
 
     response = requests.post(url, headers=headers, json=body, verify=False)
+    debug_log("Shipment API response", result=response.json())
     return response.json()
 
 def extract_shipment_info(result):

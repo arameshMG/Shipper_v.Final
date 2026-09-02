@@ -1,5 +1,6 @@
 import requests
 import config
+from debug_utils import debug_log
 
 def get_graph_token():
     url = f"https://login.microsoftonline.com/{config.GRAPH_TENANT_ID}/oauth2/v2.0/token"
@@ -17,6 +18,7 @@ def get_graph_token():
 
 def get_user_address(user_email, token):
     url = f"https://graph.microsoft.com/v1.0/users/{user_email}?$select=displayName, streetAddress"
+    debug_log("Requesting Graph user", url=url)
 
     headers = {
         "Authorization": f"Bearer {token}",
@@ -25,5 +27,6 @@ def get_user_address(user_email, token):
 
     response = requests.get(url, headers=headers, verify=False)
     user_data = response.json()
+    debug_log("Graph response received", user_data=user_data)
     return user_data
 
