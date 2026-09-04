@@ -4,7 +4,7 @@ import config
 from debug_utils import debug_log
 
 def get_fedex_token():
-    url = "https://apis.fedex.com/oauth/token"
+    url = "https://apis-sandbox.fedex.com/oauth/token"
 
     data = {
         "grant_type": "client_credentials",
@@ -129,7 +129,7 @@ def parse_address(raw_address):
 
 def create_shipment(shipper_name, shipper_address, recipient_name, recipient_address, token):
     debug_log("Creating shipment", shipper=shipper_name, recipient=recipient_name)
-    url = "https://apis.fedex.com/ship/v1/shipments"
+    url = "https://apis-sandbox.fedex.com/ship/v1/shipments"
 
     headers = {
         "Authorization": f"Bearer {token}",
