@@ -53,7 +53,7 @@ def create_labels():
     print("User DATA:", user_data)
     user_name = user_data["displayName"]
     user_address = fedex_oauth.parse_address(user_data["streetAddress"])
-
+    debug_log("Parsed address", parsed=user_address)
     fedex_token = fedex_oauth.get_fedex_token()
 
 # Outbound
