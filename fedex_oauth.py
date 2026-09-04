@@ -16,9 +16,12 @@ def get_fedex_token():
     token_data = response.json()
     return token_data["access_token"]
 
+_CITY_CHARS = r"A-Za-z\s\.\-'\u2019"
+
+
 def _parse_structured(raw_address):
     city_state_zip_pattern = re.compile(
-        r'(?P<city>[A-Za-z][A-Za-z\s\.\-\']*?)\s*,?\s+(?P<state>[A-Za-z]{2})\s+(?P<zip>\d{5}(-\d{4})?)\s*$'
+        r'(?P<city>[' + _CITY_CHARS + r'][' + _CITY_CHARS + r']*?)\s*,?\s+(?P<state>[A-Za-z]{2})\s+(?P<zip>\d{5}(-\d{4})?)\s*,?\s*$'
     )
 
     lines = [line.strip() for line in raw_address.splitlines() if line.strip()]
@@ -31,8 +34,15 @@ def _parse_structured(raw_address):
                 city = match.group("city").strip().rstrip(',')
                 state = match.group("state").strip().upper()
                 zip_code = match.group("zip").strip()
+                # If there's more than one candidate line, the FIRST is
+                # likely a name (only when there are 2+ lines) and the
+                # REST (street + apt, often on separate lines) get joined
+                if len(candidate_lines) > 1:
+                    street = ' '.join(candidate_lines[1:])
+                else:
+                    street = candidate_lines[0]
                 return {
-                    "street": candidate_lines[-1],
+                    "street": street,
                     "city": city,
                     "state": state,
                     "zip_code": zip_code
@@ -80,7 +90,7 @@ def _parse_concatenated(raw_address):
     address_only = ' '.join(tokens[street_start_index:])
 
     city_state_zip_pattern = re.compile(
-        r'(?P<city>[A-Za-z][A-Za-z\s\.\-\']*?)\s*,?\s+(?P<state>[A-Za-z]{2})\s+(?P<zip>\d{5}(-\d{4})?)\s*$'
+        r'(?P<city>[' + _CITY_CHARS + r'][' + _CITY_CHARS + r']*?)\s*,?\s+(?P<state>[A-Za-z]{2})\s+(?P<zip>\d{5}(-\d{4})?)\s*,?\s*$'
     )
     match = city_state_zip_pattern.search(address_only)
 
@@ -115,6 +125,7 @@ def parse_address(raw_address):
         pass
 
     return _parse_concatenated(raw_address)
+
 
 def create_shipment(shipper_name, shipper_address, recipient_name, recipient_address, token):
     debug_log("Creating shipment", shipper=shipper_name, recipient=recipient_name)
