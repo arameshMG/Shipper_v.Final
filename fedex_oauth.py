@@ -139,8 +139,7 @@ def create_shipment(shipper_name, shipper_address, recipient_name, recipient_add
         "requestedShipment": {
             "shipper": {
                 "contact": {
-                    "personName": "Infrastructure",
-                    "companyName": shipper_name,
+                    "personName": shipper_name + " ",
                     "phoneNumber": "000000000"
                 },
                 "address": {
