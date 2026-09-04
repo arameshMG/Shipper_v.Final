@@ -5,7 +5,7 @@ from debug_utils import debug_log
 
 app = Flask(__name__)
 
-SHIPPER_NAME = "INFRASTRUCTURE TEAM MEDICAL GUARDIAN"
+SHIPPER_NAME = "INFRA TEAM MEDICAL GUARDIAN"
 SHIPPER_ADDRESS = {
     "street": "1818 Market St 12th Floor",
     "city": "Philadelphia",
