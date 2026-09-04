@@ -34,9 +34,7 @@ def _parse_structured(raw_address):
                 city = match.group("city").strip().rstrip(',')
                 state = match.group("state").strip().upper()
                 zip_code = match.group("zip").strip()
-                # If there's more than one candidate line, the FIRST is
-                # likely a name (only when there are 2+ lines) and the
-                # REST (street + apt, often on separate lines) get joined
+
                 if len(candidate_lines) > 1:
                     street = ' '.join(candidate_lines[1:])
                 else:
@@ -141,7 +139,8 @@ def create_shipment(shipper_name, shipper_address, recipient_name, recipient_add
         "requestedShipment": {
             "shipper": {
                 "contact": {
-                    "personName": shipper_name,
+                    "personName": "Infrastructure",
+                    "companyName": shipper_name,
                     "phoneNumber": "000000000"
                 },
                 "address": {
