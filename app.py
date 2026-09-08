@@ -63,7 +63,7 @@ def create_labels():
     )
     debug_log("FedEx outbound result", outbound_result=outbound_result)
     print("OUTBOUND RESULT:", outbound_result)
-    outbound_extracted = fedex_oauth.extract_shipment_info(outbound_result)
+    outbound_extracted = fedex_oauth.extract_shipment_info(outbound_result, token=fedex_token)
 
 # Inbound
 
@@ -72,7 +72,7 @@ def create_labels():
     )
     debug_log("FedEx return result", inbound_result=inbound_result)
     print("RETURN RESULT:", inbound_result)
-    return_extracted = fedex_oauth.extract_shipment_info(inbound_result)
+    return_extracted = fedex_oauth.extract_shipment_info(inbound_result, token=fedex_token)
 
     return jsonify({
         "outboundLabel": outbound_extracted,

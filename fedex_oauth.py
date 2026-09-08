@@ -194,13 +194,49 @@ def create_shipment(shipper_name, shipper_address, recipient_name, recipient_add
     debug_log("Shipment API response", result=response.json())
     return response.json()
 
-def extract_shipment_info(result):
+def verify_label_url(label_url, token):
+    headers = {"Authorization": f"Bearer {token}"}
+    try:
+        response = requests.get(label_url, headers=headers, verify=False, timeout=15)
+        content_type = response.headers.get("Content-Type", "")
+
+        if response.status_code == 200 and "pdf" in content_type.lower():
+            debug_log(
+                "Label URL verification PASSED",
+                label_url=label_url,
+                status_code=response.status_code,
+                content_type=content_type,
+                content_length=len(response.content)
+            )
+            return True
+        else:
+            debug_log(
+                "Label URL verification FAILED — response was not a valid PDF",
+                label_url=label_url,
+                status_code=response.status_code,
+                content_type=content_type,
+                response_body_preview=response.text[:500]
+            )
+            return False
+    except Exception as e:
+        debug_log("Label URL verification FAILED — request error", error=e, label_url=label_url)
+        return False
+
+def extract_shipment_info(result, token=None, verify=True):
     shipment = result["output"]["transactionShipments"][0]
     tracking_number = shipment["masterTrackingNumber"]
     label_url = shipment["pieceResponses"][0]["packageDocuments"][0]["url"]
 
-    return {
-        "trackingNumber": tracking_number ,
-        "labelUrl": label_url 
-    }
+    if verify and token:
+        is_valid = verify_label_url(label_url, token)
+        if not is_valid:
+            debug_log(
+                "WARNING: label was created but URL is not currently retrievable",
+                tracking_number=tracking_number,
+                label_url=label_url
+            )
 
+    return {
+        "trackingNumber": tracking_number,
+        "labelUrl": label_url
+    }
