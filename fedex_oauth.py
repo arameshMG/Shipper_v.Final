@@ -169,8 +169,15 @@ def create_shipment(shipper_name, shipper_address, recipient_name, recipient_add
             "packagingType": "YOUR_PACKAGING",
             "pickupType": "DROPOFF_AT_FEDEX_LOCATION",
             "shippingChargesPayment": {
-                "paymentType": "SENDER"
-            },
+                "paymentType": "THIRD_PARTY",
+                "payor": {
+                    "responsibleParty": {
+                        "accountNumber": {
+                            "value": config.FEDEX_ACCOUNT_NUMBER
+                        }
+                    }
+                }
+            }
             "labelSpecification": {
                 "labelFormatType": "COMMON2D",
                 "imageType": "PDF",
