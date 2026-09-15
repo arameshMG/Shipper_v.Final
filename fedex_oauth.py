@@ -177,7 +177,7 @@ def create_shipment(shipper_name, shipper_address, recipient_name, recipient_add
                         }
                     }
                 }
-            }
+            },
             "labelSpecification": {
                 "labelFormatType": "COMMON2D",
                 "imageType": "PDF",
