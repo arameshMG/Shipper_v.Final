@@ -24,7 +24,7 @@ jobs:
 
       - name: Check for syntax errors
         run: |
-        python -m py_compile app.py graph_client.py debug_utils.py config.py fedex_oauth.py
+          python -m py_compile app.py graph_client.py debug_utils.py config.py fedex_oauth.py
 
       - name: Run tests
         run: |
