@@ -181,7 +181,7 @@ def create_shipment(shipper_name, shipper_address, recipient_name, recipient_add
             "labelSpecification": {
                 "labelFormatType": "COMMON2D",
                 "imageType": "PDF",
-                "labelStockType": "PAPER_85X11_TOP_HALF_LABEL"
+                "labelStockType": "STOCK_4X6"
             },
             "requestedPackageLineItems": [
                 {
