@@ -28,6 +28,6 @@ jobs:
 
       - name: Run tests
         run: |
-        pip install pytest
-        pytest -v || echo "No tests found or tests failed - review"
+          pip install pytest
+          pytest -v || echo "No tests found or tests failed - review"
 
