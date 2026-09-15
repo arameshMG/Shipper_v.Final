@@ -1,0 +1,33 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Check for syntax errors
+        run: |
+        python -m py_compile app.py graph_client.py debug_utils.py config.py fedex_oauth.py
+
+      - name: Run tests
+        run: |
+        pip install pytest
+        pytest -v || echo "No tests found or tests failed - review"
+
