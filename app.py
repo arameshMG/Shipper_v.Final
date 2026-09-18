@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import graph_client
 import fedex_oauth
 from debug_utils import debug_log
+from audit_client import log_to_audit
 
 app = Flask(__name__)
 
@@ -73,6 +74,13 @@ def create_labels():
     debug_log("FedEx return result", inbound_result=inbound_result)
     print("RETURN RESULT:", inbound_result)
     return_extracted = fedex_oauth.extract_shipment_info(inbound_result, token=fedex_token)
+
+    log_to_audit(
+        event_type="labels_created",
+        user_identifier=user_email,
+        status="success",
+        details=f"Outbound: {outbound_extracted.get('trackingNumber')}, Return: {return_extracted.get('trackingNumber')}"
+    )
 
     return jsonify({
         "outboundLabel": outbound_extracted,
